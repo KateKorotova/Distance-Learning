@@ -8,27 +8,27 @@ namespace ConsoleApplication1
 {
     class Program
     {
-        static int cx = 20;
-        static int cy = 10;
+        static int cx = 50;
+        static int cy = 20;
 
         static int numStars()
         {
             Console.WriteLine("How many stars do you prefer?");
             int num;
             bool ques = Int32.TryParse(Console.ReadLine(), out num);
-            if (ques == false)
+            if (ques == false || num == 0)
                 throw new ArgumentException("Non valid data");
             return num;
         }
 
-       public struct Star
+        public struct Star
         {
             public Star(int x, int y)
             {
                 this.x = x;
                 this.y = y;
                 this.stepy = 1;
-                this.stepx = 1; 
+                this.stepx = 1;
             }
             public int x;
             public int y;
@@ -42,17 +42,79 @@ namespace ConsoleApplication1
             Star[] stars = new Star[quantity];
             for (int i = 0; i < stars.Length; i++)
             {
-                stars[i].x = r.Next(0, cx);
-                stars[i].y = r.Next(0,cy);
+                stars[i] = new Star(r.Next(0, cx), r.Next(0, cy));
+
             }
             return stars; 
         }
 
-        static void paint(Star[] stars)
+        static void checkBoard(ref Star[] stars)
+        {
+            for ( int i = 0; i < stars.Length; i++)
+            {
+                if (stars[i].x >= cx)
+                {
+                    stars[i].stepx *= -1;
+                    stars[i].x = cx;
+                }
+                if (stars[i].y >= cy)
+                {
+                    stars[i].stepy *= -1;
+                    stars[i].y = cy;
+                }
+                if (stars[i].x <= 0)
+                {
+                    stars[i].stepx *= -1;
+                    stars[i].x = 0;
+                }
+                if (stars[i].y <= 0)
+                {
+                    stars[i].stepy *= -1;
+                    stars[i].y = 0;
+                }
+            }
+        }
+
+        static void checkPos(ref Star[] stars)
         {
             for (int i = 0; i < stars.Length; i++)
-            {
+                for( int j = i + 1; j < stars.Length; j++)
+                {
+                    if ((stars[i].x == stars[j].x + 1 || stars[i].x + 1 == stars[j].x || stars[i].x == stars[j].x) && stars[i].y == stars[j].y)
+                    {
+                        stars[i].x = stars[j].x;
+                        stars[i].stepx *= -1;
+                        stars[j].stepx *= -1;
+                        stars[i].stepy *= -1;
+                    }
+                    if ((stars[i].y == stars[j].y + 1 || stars[i].y == stars[j].y + 1 || stars[i].y == stars[j].y) && stars[i].x == stars[j].x)
+                    {
+                        stars[i].y = stars[j].y;
+                        stars[i].stepy *= -1;
+                        stars[j].stepy *= -1;
+                        stars[j].stepx *= -1;
+                    }
+                }
+        }
 
+        static void paint(ref Star[] stars)
+        {
+            while (true)
+            {
+                Console.CursorVisible = false;
+
+                for (int i = 0; i < stars.Length; i++)
+                {
+                    Console.SetCursorPosition(stars[i].x, stars[i].y);
+                    Console.Write('*');
+                    stars[i].x += stars[i].stepx;
+                    stars[i].y += stars[i].stepy;
+                }
+
+                checkBoard(ref stars);
+                checkPos(ref stars);
+                System.Threading.Thread.Sleep(50);
+                Console.Clear();
             }
         }
 
@@ -60,87 +122,23 @@ namespace ConsoleApplication1
 
 
         static void Main(string[] args)
-        { 
-
-            //for (;;)
-            //{
-            //    Console.CursorVisible = false;
-
-
-            //    if (x1 >= cx)
-            //    {
-            //        stepx1 *= -1;
-            //        x1 = cx;
-            //    }
-            //    if (y1 >= cy)
-            //    {
-            //        stepy1 *= -1;
-            //        y1 = cy;
-            //    }
-            //    if (x1 <= 0)
-            //    {
-            //        stepx1 *= -1;
-            //        x1 = 0;
-            //    }
-            //    if (y1 <= 0)
-            //    {
-            //        stepy1 *= -1;
-            //        y1 = 0;
-            //    }
-
-
-            //    if (x2 >= cx)
-            //    {
-            //        stepx2 *= -1;
-            //        x2 = cx;
-            //    }
-            //    if (y2 >= cy)
-            //    {
-            //        stepy2 *= -1;
-            //        y2 = cy;
-            //    }
-            //    if (x2 <= 0)
-            //    {
-            //        stepx2 *= -1;
-            //        x2 = 0;
-            //    }
-            //    if (y2 <= 0)
-            //    {
-            //        stepy2 *= -1;
-            //        y2 = 0;
-            //    }
-
-
-
-            //    if ((x1 == x2 + 1 || x1 + 1 == x2 || x1 == x2) && y1 == y2)
-            //    {
-            //        x1 = x2; 
-            //        stepx1 *= -1;
-            //        stepx2 *= -1;
-            //        stepy1 *= -1;
-            //    }
-            //    if ((y1 == y2 + 1 || y2 == y1 + 1 || y1 == y2) && x1 == x2)
-            //    {
-            //        y1 = y2;
-            //        stepy1 *= -1;
-            //        stepy2 *= -1;
-            //        stepx2 *= -1; 
-            //    }
-
-            //    Console.SetCursorPosition(x2, y2);
-            //    Console.Write('*');
-            //    Console.SetCursorPosition(x1, y1);
-            //    Console.Write('*');
-
-            //    x1 += stepx1;
-            //    y1 += stepy1;
-
-            //    x2 += stepx2;
-            //    y2 += stepy2;
-
-            //    System.Threading.Thread.Sleep(60);
-            //    Console.Clear();
-            //}
+        {
+            int quantity;
+            while (true)
+            {
+                try
+                {
+                    quantity = numStars();
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    string e = ex.Message;
+                    Console.WriteLine(e);
+                }
+            }
+            Star[] stars = createArr(quantity);
+            paint(ref stars);
         }
     }
 }
