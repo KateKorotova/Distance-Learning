@@ -10,42 +10,95 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            int cx = 50;
-            int cy = 20;
-            int stepx = 1;
-            int stepy = 1;
+            int cx = 20;
+            int cy = 10;
+            int stepx1 = 1;
+            int stepy1 = 1;
+            int stepx2 = 1;
+            int stepy2 = 1;
             Random r = new Random();
-            int x = r.Next(0, cx);
-            int y = r.Next(0, cy);
-            //ConsoleKeyInfo k;
+            int x1 = r.Next(0, cx);
+            int y1 = r.Next(0, cy);
+            int x2 = r.Next(0, cx);
+            int y2 = r.Next(0, cy);
+
             for (;;)
             {
                 Console.CursorVisible = false;
-                Console.SetCursorPosition(x, y);
+
+
+                if (x1 >= cx)
+                {
+                    stepx1 *= -1;
+                    x1 = cx;
+                }
+                if (y1 >= cy)
+                {
+                    stepy1 *= -1;
+                    y1 = cy;
+                }
+                if (x1 <= 0)
+                {
+                    stepx1 *= -1;
+                    x1 = 0;
+                }
+                if (y1 <= 0)
+                {
+                    stepy1 *= -1;
+                    y1 = 0;
+                }
+
+
+                if (x2 >= cx)
+                {
+                    stepx2 *= -1;
+                    x2 = cx;
+                }
+                if (y2 >= cy)
+                {
+                    stepy2 *= -1;
+                    y2 = cy;
+                }
+                if (x2 <= 0)
+                {
+                    stepx2 *= -1;
+                    x2 = 0;
+                }
+                if (y2 <= 0)
+                {
+                    stepy2 *= -1;
+                    y2 = 0;
+                }
+
+
+
+                if ((x1 == x2 + 1 || x1 + 1 == x2 || x1 == x2) && y1 == y2)
+                {
+                    x1 = x2; 
+                    stepx1 *= -1;
+                    stepx2 *= -1;
+                    stepy1 *= -1;
+                }
+                if ((y1 == y2 + 1 || y2 == y1 + 1 || y1 == y2) && x1 == x2)
+                {
+                    y1 = y2;
+                    stepy1 *= -1;
+                    stepy2 *= -1;
+                    stepx2 *= -1; 
+                }
+
+                Console.SetCursorPosition(x2, y2);
                 Console.Write('*');
-                x += stepx;
-                y += stepy;
-                if (x >= cx)
-                {
-                    stepx *= -1;
-                    x = cx;
-                }
-                if (y >= cy)
-                {
-                    stepy *= -1;
-                    y = cy;
-                }
-                if (x <= 0)
-                {
-                    stepx *= -1;
-                    x = 0;
-                }
-                if (y <= 0)
-                {
-                    stepy *= -1;
-                    y = 0;
-                }
-                System.Threading.Thread.Sleep(8);
+                Console.SetCursorPosition(x1, y1);
+                Console.Write('*');
+
+                x1 += stepx1;
+                y1 += stepy1;
+
+                x2 += stepx2;
+                y2 += stepy2;
+
+                System.Threading.Thread.Sleep(60);
                 Console.Clear();
             }
         }
