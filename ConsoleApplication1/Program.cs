@@ -10,18 +10,44 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            long a;
-            bool r = Int64.TryParse(Console.ReadLine(), out a);
-            if (r == true)
+            int cx = 50;
+            int cy = 20;
+            int stepx = 1;
+            int stepy = 1;
+            Random r = new Random();
+            int x = r.Next(0, cx);
+            int y = r.Next(0, cy);
+            //ConsoleKeyInfo k;
+            for (;;)
             {
-                long f = 1;
-                for (int i = 1; i <= a; i++)
-                    f = f * i;
-                Console.WriteLine(f);
+                Console.CursorVisible = false;
+                Console.SetCursorPosition(x, y);
+                Console.Write('*');
+                x += stepx;
+                y += stepy;
+                if (x >= cx)
+                {
+                    stepx *= -1;
+                    x = cx;
+                }
+                if (y >= cy)
+                {
+                    stepy *= -1;
+                    y = cy;
+                }
+                if (x <= 0)
+                {
+                    stepx *= -1;
+                    x = 0;
+                }
+                if (y <= 0)
+                {
+                    stepy *= -1;
+                    y = 0;
+                }
+                System.Threading.Thread.Sleep(8);
+                Console.Clear();
             }
-            else
-                Console.WriteLine("Non valid data");
-            Console.ReadKey();
         }
     }
 }
