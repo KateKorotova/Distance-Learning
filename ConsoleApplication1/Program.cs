@@ -10,17 +10,17 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            int a = 10,
-    b = a / 5;
-
-            if (b <= 2)
+            long a;
+            bool r = Int64.TryParse(Console.ReadLine(), out a);
+            if (r == true)
             {
-                Console.WriteLine("Менше або дорівнює двом");
+                long f = 1;
+                for (int i = 1; i <= a; i++)
+                    f = f * i;
+                Console.WriteLine(f);
             }
-            else if (b == 2)
-            {
-                Console.WriteLine("Дорівнює двом");
-            }
+            else
+                Console.WriteLine("Non valid data");
             Console.ReadKey();
         }
     }
