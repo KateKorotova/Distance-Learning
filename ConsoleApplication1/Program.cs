@@ -8,8 +8,8 @@ namespace ConsoleApplication1
 {
     class Ball
     {
-        static int cx = 50;
-        static int cy = 20;
+        public static int cx = 50;
+        public static int cy = 20;
         internal Ball()
         {
             r = 0; 
@@ -82,7 +82,7 @@ namespace ConsoleApplication1
             Ball[] balls = new Ball[quantity];
             for (int i = 0; i < balls.Length; i++)
             {
-                balls[i] = new Ball(r.Next(0, 20), r.Next(0, 50), 0);
+                balls[i] = new Ball(r.Next(0, Ball.cx), r.Next(0, Ball.cy), 0);
 
             }
             return balls; 
